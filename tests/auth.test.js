@@ -3,7 +3,7 @@ const app = require('../src/app');
 const { users } = require('../src/controllers/auth.controller');
 
 // Reuse these values across related tests
-const TEST_EMAIL = 'test2@example.com';
+const TEST_EMAIL = 'test3@example.com';
 const TEST_PASSWORD = 'password123';
 
 // Clear the in-memory users array before every test so each test

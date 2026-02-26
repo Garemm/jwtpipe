@@ -27,7 +27,7 @@ const register = async (req, res) => {
 
   // 1. Basic input validation
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required. Please try again' });
+    return res.status(400).json({ message: 'Email and password are required.' });
   }
 
   if (password.length < 6) {
