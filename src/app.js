@@ -9,7 +9,7 @@ app.use(express.json());
 
 // GET / - confirms the API is reachable
 app.get('/', (req, res) => {
-  res.send('Auth API running');
+  res.send('Auth API running successfully.');
 });
 
 // GET /health - returns a simple status check
