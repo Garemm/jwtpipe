@@ -1,0 +1,36 @@
+name: CI
+
+# Trigger this workflow on every push or pull request to any branch.
+# This ensures all changes are tested before merging.
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository code so the workflow can access it.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Set up the Node.js environment using the latest LTS release.
+      #    "lts/*" always resolves to the current Long-Term Support version.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm          # Cache node_modules for faster subsequent runs
+
+      # 3. Install exact dependency versions from package-lock.json.
+      #    --ci is stricter than npm install: it fails if the lockfile is out of sync.
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Run the test suite.
+      #    If any test fails, this step returns a non-zero exit code and
+      #    the entire workflow is marked as failed, blocking the PR from merging.
+      - name: Run tests
+        run: npm test

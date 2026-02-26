@@ -1,0 +1,26 @@
+name: CD
+
+# Trigger only when CI completes on the main branch.
+# Using workflow_run ensures the deploy never runs unless all tests pass first.
+on:
+  workflow_run:
+    workflows: [CI]       # Must match the `name:` field in ci.yml exactly
+    branches: [main]
+    types: [completed]
+
+jobs:
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+
+    # Only deploy if the CI workflow SUCCEEDED — skip on failure or cancellation.
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      # Trigger a Render deploy by calling the deploy hook URL.
+      # Render will pull the latest code from main and redeploy the service.
+      # --fail makes curl return a non-zero exit code on HTTP error responses,
+      # which causes the workflow step — and therefore the job — to fail.
+      - name: Trigger Render deploy
+        run: |
+          curl --fail -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
